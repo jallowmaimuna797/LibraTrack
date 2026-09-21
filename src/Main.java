@@ -5,14 +5,8 @@ public class Main {
 
         // Store the titles of the existing books
         String[] titles = {"Java Basics", "Database Systems", "Web Development", "Cybersecurity", "Networking"};
-
-        // Store the authors of the existing books
         String[] authors = {"Ebrima Touraye", "Ebrima Faal", "Muhammed Chaw", "Maimuna Jallow", "Ebou Badjie"};
-
-        // Store the ISBN numbers of the existing books
         String[] isbn = {"1001", "1002", "1003", "1004", "1005"};
-
-        // Store the availability status of each book
         String[] available = {"true", "true", "false", "true", "false"};
 
         // Create a Scanner object to get input from the user
@@ -84,5 +78,44 @@ public class Main {
             System.out.println("Available: " + available[i]);
             System.out.println();
         }
+        // LINEAR SEARCH FOR BOOK BY TITLE
+        //  Asking the user to enter the title they want to search
+        System.out.print("Enter the book title to search: ");
+        String searchTitle = scanner.nextLine();
+
+        //Create a variable to keep track of whether the book is found starting with false because we have not searched yet
+        boolean found = false;
+
+         // Linear search
+        for (int i = 0; i < titles.length; i++) {
+
+            // Compare the title in the array with the title entered by the user
+            // equalsIgnoreCase() allows uppercase and lowercase differences
+            if (titles[i].equalsIgnoreCase(searchTitle)) {
+
+                // The book has been found, so change found from false to true
+                found = true;
+
+                // Display the information about the book that was found
+                System.out.println();
+                System.out.println("Book found!");
+                System.out.println("Title: " + titles[i]);
+                System.out.println("Author: " + authors[i]);
+                System.out.println("ISBN: " + isbn[i]);
+                System.out.println("Available: " + available[i]);
+
+                // Stopping the loop because we already found the book
+                break;}
+            // Check if the book was not found
+            }
+        if (!found) {
+
+            // Display a message to the user
+            System.out.println();
+            System.out.println("Book not found.");
+        }
+        scanner.close();
+
+
     }
 }
