@@ -17,6 +17,7 @@ public class Main {
         System.out.println();
 
         // Loop through the arrays and display each book
+        // TASK 4: Print the full catalog using a loop
         for (int i = 0; i < titles.length; i++) {
             System.out.println("Title: " + titles[i]);
             System.out.println("Author: " + authors[i]);
