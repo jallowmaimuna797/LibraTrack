@@ -88,7 +88,7 @@ public class Main {
         boolean found = false;
 
          // Linear search
-        for (int i = 0; i < titles.length; i++) {
+         for (int i = 0; i < titles.length; i++) {
 
             // Compare the title in the array with the title entered by the user
             // equalsIgnoreCase() allows uppercase and lowercase differences
@@ -114,6 +114,36 @@ public class Main {
             // Display a message to the user
             System.out.println();
             System.out.println("Book not found.");
+        }
+
+        // TASK 5: Toggle checkout/return status
+        // Ask the user for the book they want to check out or return
+        System.out.print("Enter the book title to checkout or return: ");
+        String statusTitle = scanner.nextLine();
+
+        // Search through the books
+        for (int i = 0; i < titles.length; i++) {
+
+            // Check if the entered title matches a book
+            if (titles[i].equalsIgnoreCase(statusTitle)) {
+
+                // If the book is available, check it out
+                if (available[i].equals("true")) {
+                    available[i] = "false";
+                    System.out.println("Book checked out successfully.");
+                } else {
+
+                    // If the book is not available, return it
+                    available[i] = "true";
+                    System.out.println("Book returned successfully.");
+                }
+
+                // Display the new availability status
+                System.out.println("Title: " + titles[i]);
+                System.out.println("Available: " + available[i]);
+
+                break;
+            }
         }
         scanner.close();
 
