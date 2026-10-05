@@ -12,12 +12,67 @@ public class Main {
         // Create a Scanner object to get input from the user
         Scanner scanner = new Scanner(System.in);
 
-        // Display the current library catalog
-        System.out.println("LibraTrack Library Catalog");
-        System.out.println();
 
-        // Loop through the arrays and display each book
-        // TASK 4: Print the full catalog using a loop
+        // Display the full catalog
+        printCatalog(titles, authors, isbn, available);
+}
+
+// Method for adding a new book
+static String[][] addBook(Scanner scanner, String[] titles, String[] authors, String[] isbn, String[] available) {
+    // Ask the user to enter the details of a new book
+    System.out.println("Enter details for a new book:");
+
+    System.out.print("Enter title: ");
+    String newTitle = scanner.nextLine();
+
+    System.out.print("Enter author: ");
+    String newAuthor = scanner.nextLine();
+
+    System.out.print("Enter ISBN: ");
+    String newBookIsbn = scanner.nextLine();
+
+    // Create new arrays with one extra space for the new book
+    String[] newTitles = new String[titles.length + 1];
+    String[] newAuthors = new String[authors.length + 1];
+    String[] newIsbn = new String[isbn.length + 1];
+    String[] newAvailable = new String[available.length + 1];
+
+    // Copy the existing books into the new arrays
+    for (int i = 0; i < titles.length; i++) {
+        newTitles[i] = titles[i];
+        newAuthors[i] = authors[i];
+        newIsbn[i] = isbn[i];
+        newAvailable[i] = available[i];
+    }
+
+    // Add the new book at the end of the new arrays
+    newTitles[titles.length] = newTitle;
+    newAuthors[authors.length] = newAuthor;
+    newIsbn[isbn.length] = newBookIsbn;
+
+    // Make the new book available
+    newAvailable[available.length] = "true";
+
+    // Replace the old arrays with the new larger arrays
+    titles = newTitles;
+    authors = newAuthors;
+    isbn = newIsbn;
+    available = newAvailable;
+
+    // Return the updated arrays
+    return new String[][]{titles, authors, isbn, available};
+
+}
+
+// Method for printing the full catalog
+static void printCatalog(String[] titles, String[] authors, String[] isbn, String[] available) {
+
+    // Display the current library catalog
+    System.out.println("LibraTrack Library Catalog");
+    System.out.println();
+
+    // Loop through the arrays and display each book
+    // TASK 4: Print the full catalog using a loop
         for (int i = 0; i < titles.length; i++) {
             System.out.println("Title: " + titles[i]);
             System.out.println("Author: " + authors[i]);
@@ -25,128 +80,82 @@ public class Main {
             System.out.println("Available: " + available[i]);
             System.out.println();
         }
+    }
 
-        // Ask the user to enter the details of a new book
-        System.out.println("Enter details for a new book:");
+// Method for Linear search
+static void searchBook(Scanner scanner, String[] titles, String[] authors, String[] isbn, String[] available) {
 
-        System.out.print("Enter title: ");
-        String newTitle = scanner.nextLine();
+     // LINEAR SEARCH FOR BOOK BY TITLE
+    //  Asking the user to enter the title they want to search
+    System.out.print("Enter the book title to search: ");
+    String searchTitle = scanner.nextLine();
 
-        System.out.print("Enter author: ");
-        String newAuthor = scanner.nextLine();
+    //Create a variable to keep track of whether the book is found starting with false because we have not searched yet
+    boolean found = false;
 
-        System.out.print("Enter ISBN: ");
-        String newBookIsbn = scanner.nextLine();
+    // Linear search
+    for (int i = 0; i < titles.length; i++) {
 
-        // Create new arrays with one extra space for the new book
-        String[] newTitles = new String[titles.length + 1];
-        String[] newAuthors = new String[authors.length + 1];
-        String[] newIsbn = new String[isbn.length + 1];
-        String[] newAvailable = new String[available.length + 1];
+        // Compare the title in the array with the title entered by the user
+        // equalsIgnoreCase() allows uppercase and lowercase differences
+        if (titles[i].equalsIgnoreCase(searchTitle)) {
 
-        // Copy the existing books into the new arrays
-        for (int i = 0; i < titles.length; i++) {
-            newTitles[i] = titles[i];
-            newAuthors[i] = authors[i];
-            newIsbn[i] = isbn[i];
-            newAvailable[i] = available[i];
-        }
+            // The book has been found, so change found from false to true
+            found = true;
 
-        // Add the new book at the end of the new arrays
-        newTitles[titles.length] = newTitle;
-        newAuthors[authors.length] = newAuthor;
-        newIsbn[isbn.length] = newBookIsbn;
-
-        // Make the new book available
-        newAvailable[available.length] = "true";
-
-        // Replace the old arrays with the new larger arrays
-        titles = newTitles;
-        authors = newAuthors;
-        isbn = newIsbn;
-        available = newAvailable;
-
-        // Display the updated catalog
-        System.out.println();
-        System.out.println("Updated LibraTrack Library Catalog");
-        System.out.println();
-
-        // Loop through the updated arrays and display all books
-        for (int i = 0; i < titles.length; i++) {
+            // Display the information about the book that was found
+            System.out.println();
+            System.out.println("Book found!");
             System.out.println("Title: " + titles[i]);
             System.out.println("Author: " + authors[i]);
             System.out.println("ISBN: " + isbn[i]);
             System.out.println("Available: " + available[i]);
-            System.out.println();
+
+            // Stopping the loop because we already found the book
+            break;
         }
-        // LINEAR SEARCH FOR BOOK BY TITLE
-        //  Asking the user to enter the title they want to search
-        System.out.print("Enter the book title to search: ");
-        String searchTitle = scanner.nextLine();
+    }
+    // Check if the book was not found
+    if (!found) {
 
-        //Create a variable to keep track of whether the book is found starting with false because we have not searched yet
-        boolean found = false;
+        // Display a message to the user
+        System.out.println();
+        System.out.println("Book not found.");
+    }
+}
 
-         // Linear search
-         for (int i = 0; i < titles.length; i++) {
+// Method for checking out or returning a book
+static void toggleCheckout(Scanner scanner, String[] titles, String[] available) {
+    // TASK 5: Toggle checkout/return status
+    // Ask the user for the book they want to check out or return
+    System.out.print("Enter the book title to checkout or return: ");
+    String statusTitle = scanner.nextLine();
 
-            // Compare the title in the array with the title entered by the user
-            // equalsIgnoreCase() allows uppercase and lowercase differences
-            if (titles[i].equalsIgnoreCase(searchTitle)) {
+    // Search through the books
+    for (int i = 0; i < titles.length; i++) {
 
-                // The book has been found, so change found from false to true
-                found = true;
+        // Check if the entered title matches a book
+        if (titles[i].equalsIgnoreCase(statusTitle)) {
 
-                // Display the information about the book that was found
-                System.out.println();
-                System.out.println("Book found!");
-                System.out.println("Title: " + titles[i]);
-                System.out.println("Author: " + authors[i]);
-                System.out.println("ISBN: " + isbn[i]);
-                System.out.println("Available: " + available[i]);
+            // If the book is available, check it out
+            if (available[i].equals("true")) {
+                available[i] = "false";
+                System.out.println("Book checked out successfully.");
+            } else {
 
-                // Stopping the loop because we already found the book
-                break;}
-            // Check if the book was not found
+                // If the book is not available, return it
+                available[i] = "true";
+                System.out.println("Book returned successfully.");
             }
-        if (!found) {
 
-            // Display a message to the user
-            System.out.println();
-            System.out.println("Book not found.");
+            // Display the new availability status
+            System.out.println("Title: " + titles[i]);
+            System.out.println("Available: " + available[i]);
+
+            break;
         }
-
-        // TASK 5: Toggle checkout/return status
-        // Ask the user for the book they want to check out or return
-        System.out.print("Enter the book title to checkout or return: ");
-        String statusTitle = scanner.nextLine();
-
-        // Search through the books
-        for (int i = 0; i < titles.length; i++) {
-
-            // Check if the entered title matches a book
-            if (titles[i].equalsIgnoreCase(statusTitle)) {
-
-                // If the book is available, check it out
-                if (available[i].equals("true")) {
-                    available[i] = "false";
-                    System.out.println("Book checked out successfully.");
-                } else {
-
-                    // If the book is not available, return it
-                    available[i] = "true";
-                    System.out.println("Book returned successfully.");
-                }
-
-                // Display the new availability status
-                System.out.println("Title: " + titles[i]);
-                System.out.println("Available: " + available[i]);
-
-                break;
-            }
-        }
-        scanner.close();
-
 
     }
 }
+}
+
