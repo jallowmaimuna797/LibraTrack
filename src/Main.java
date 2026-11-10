@@ -2,6 +2,8 @@ import java.util.Scanner;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.Comparator;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,14 +17,47 @@ public class Main {
         // Create a Scanner object to get input from the user
         Scanner scanner = new Scanner(System.in);
 
-        // Display the full catalog
-        printCatalog(titles, authors, isbn, available);
+        // Store the catalog arrays so they can be updated
+        String[][] catalog = {titles, authors, isbn, available};
 
-        // Search for a book using generic search
-        searchBook(scanner, titles, authors, isbn, available);
+        Map<String, Runnable> menu = new HashMap<>();
+        menu.put("1", () -> {
+            String[][] updatedCatalog = addBook(scanner, catalog[0], catalog[1], catalog[2], catalog[3]);
+            catalog[0] = updatedCatalog[0];
+            catalog[1] = updatedCatalog[1];
+            catalog[2] = updatedCatalog[2];
+            catalog[3] = updatedCatalog[3];
+        });
 
-        // Display available books sorted by title
-        displayAvailableBooks(titles, authors, isbn, available);
+        menu.put("2", () -> searchBook(scanner, catalog[0], catalog[1], catalog[2], catalog[3]));
+        menu.put("3", () -> printCatalog(catalog[0], catalog[1], catalog[2], catalog[3]));
+        menu.put("4", () -> toggleCheckout(scanner, catalog[0], catalog[3]));
+        menu.put("5", () -> displayAvailableBooks(catalog[0], catalog[1], catalog[2], catalog[3]));
+
+        String choice;
+
+        do {
+            System.out.println("\nLibraTrack Menu");
+            System.out.println("1. Add a book");
+            System.out.println("2. Search for a book");
+            System.out.println("3. Display catalog");
+            System.out.println("4. Checkout/Return a book");
+            System.out.println("5. Display available books");
+            System.out.println("0. Exit");
+            System.out.print("Enter your choice: ");
+
+            choice = scanner.nextLine();
+
+            if (menu.containsKey(choice)) {
+                menu.get(choice).run();
+            } else if (!choice.equals("0")) {
+                System.out.println("Invalid choice. Try again.");
+            }
+
+        } while (!choice.equals("0"));
+
+        System.out.println("Thank you for using LibraTrack!");
+        scanner.close();
 }
 
     // Generic search method using Predicate
