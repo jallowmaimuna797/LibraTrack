@@ -1,5 +1,7 @@
 import java.util.Scanner;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
+import java.util.Comparator;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,6 +20,9 @@ public class Main {
 
         // Search for a book using generic search
         searchBook(scanner, titles, authors, isbn, available);
+
+        // Display available books sorted by title
+        displayAvailableBooks(titles, authors, isbn, available);
 }
 
     // Generic search method using Predicate
@@ -31,6 +36,24 @@ public class Main {
         }
 
         return -1;
+    }
+
+    // Method for displaying available books using Streams
+    static void displayAvailableBooks(String[] titles, String[] authors, String[] isbn, String[] available) {
+
+        System.out.println("\nAvailable Books (Sorted by Title):");
+
+        IntStream.range(0, titles.length)
+                .filter(i -> available[i].equals("true"))
+                .boxed()
+                .sorted(Comparator.comparing(i -> titles[i]))
+                .forEach(i -> {
+                    System.out.println("Title: " + titles[i]);
+                    System.out.println("Author: " + authors[i]);
+                    System.out.println("ISBN: " + isbn[i]);
+                    System.out.println("Available: " + available[i]);
+                    System.out.println();
+                });
     }
     /**
      * Add a new book to the library catalog.
