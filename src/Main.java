@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,11 +13,38 @@ public class Main {
         // Create a Scanner object to get input from the user
         Scanner scanner = new Scanner(System.in);
 
-
         // Display the full catalog
         printCatalog(titles, authors, isbn, available);
+
+        // Search for a book using generic search
+        searchBook(scanner, titles, authors, isbn, available);
 }
 
+    // Generic search method using Predicate
+    static int genericSearch(String[] items, Predicate<String> condition) {
+
+        for (int i = 0; i < items.length; i++) {
+
+            if (condition.test(items[i])) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+    /**
+     * Add a new book to the library catalog.
+     * Prompts the user to enter the book's title, author, and ISBN.
+     * Create larger arrays, copies the existing book details, and add.
+     * The new book with its availability set to true.
+     *
+     * @param scanner  the Scanner object used to read user input
+     * @param titles   the array containing the existing book titles
+     * @param authors  the array containing the existing book authors
+     * @param isbn     the array containing the existing book ISBNs
+     * @param available the array containing the availability status of each book
+     * @return a two-dimensional array containing the updated book catalog arrays
+     */
 // Method for adding a new book
 static String[][] addBook(Scanner scanner, String[] titles, String[] authors, String[] isbn, String[] available) {
     // Ask the user to enter the details of a new book
@@ -63,7 +91,15 @@ static String[][] addBook(Scanner scanner, String[] titles, String[] authors, St
     return new String[][]{titles, authors, isbn, available};
 
 }
-
+    /**
+     * Display all books currently stored in the library catalog.
+     * Prints each book's title, author, ISBN, and availability status.
+     *
+     * @param titles the array containing the book titles
+     * @param authors the array containing the book authors
+     * @param isbn the array containing the book ISBNs
+     * @param available the array containing the availability status of each book
+     */
 // Method for printing the full catalog
 static void printCatalog(String[] titles, String[] authors, String[] isbn, String[] available) {
 
@@ -82,6 +118,18 @@ static void printCatalog(String[] titles, String[] authors, String[] isbn, Strin
         }
     }
 
+    /**
+     *Searches for a book by title using linear search.
+     * Compares the entered title with the titles in the catalog,
+     * ignoring differences between uppercase and lowercase letters.
+     * Displays the book's details if a match is found.
+     *
+     * @param scanner the Scanner object used to read the search title
+     * @param titles the array containing the book titles
+     * @param authors the array containing the book authors
+     * @param isbn the array containing the book ISBNs
+     * @param available the array containing the availability status of each book
+     */
 // Method for Linear search
 static void searchBook(Scanner scanner, String[] titles, String[] authors, String[] isbn, String[] available) {
 
@@ -93,37 +141,32 @@ static void searchBook(Scanner scanner, String[] titles, String[] authors, Strin
     //Create a variable to keep track of whether the book is found starting with false because we have not searched yet
     boolean found = false;
 
-    // Linear search
-    for (int i = 0; i < titles.length; i++) {
+    // Use generic search with a Predicate to find a book by title
+    int index = genericSearch(titles,
+            title -> title.equalsIgnoreCase(searchTitle));
 
-        // Compare the title in the array with the title entered by the user
-        // equalsIgnoreCase() allows uppercase and lowercase differences
-        if (titles[i].equalsIgnoreCase(searchTitle)) {
+    if (index != -1) {
+        System.out.println();
+        System.out.println("Book found!");
+        System.out.println("Title: " + titles[index]);
+        System.out.println("Author: " + authors[index]);
+        System.out.println("ISBN: " + isbn[index]);
+        System.out.println("Available: " + available[index]);
 
-            // The book has been found, so change found from false to true
-            found = true;
-
-            // Display the information about the book that was found
-            System.out.println();
-            System.out.println("Book found!");
-            System.out.println("Title: " + titles[i]);
-            System.out.println("Author: " + authors[i]);
-            System.out.println("ISBN: " + isbn[i]);
-            System.out.println("Available: " + available[i]);
-
-            // Stopping the loop because we already found the book
-            break;
-        }
-    }
-    // Check if the book was not found
-    if (!found) {
-
-        // Display a message to the user
+    } else {
         System.out.println();
         System.out.println("Book not found.");
     }
 }
-
+    /**
+     * Checks out or returns a book in the library catalog.
+     * Searches for a book by title and changes its availability status.
+     * If the book is available, it is checked out; otherwise, it is returned.
+     *
+     * @param scanner the Scanner object used to read the book title
+     * @param titles the array containing the book titles
+     * @param available the array containing the availability status of each book
+     */
 // Method for checking out or returning a book
 static void toggleCheckout(Scanner scanner, String[] titles, String[] available) {
     // TASK 5: Toggle checkout/return status
