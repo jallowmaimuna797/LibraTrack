@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-    public class Library {
+    public class Library implements Searchable, Borrowable {
 
         private List<Book> books;
 
@@ -23,6 +23,7 @@ import java.util.List;
             books.add(book);
         }
 
+        @Override
         public Book findBookByTitle(String title) {
             for (Book book : books) {
                 if (book.getTitle().equalsIgnoreCase(title)) {
@@ -31,5 +32,16 @@ import java.util.List;
             }
             return null;
         }
+
+        @Override
+        public void borrowBook(Book book) {
+
+        }
+
+        @Override
+        public void returnBook(Book book) {
+
+        }
+        
     }
 

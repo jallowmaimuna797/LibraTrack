@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class Main {
+
     public static void main(String[] args) {
 
         // Create a Scanner object to get input from the user
@@ -126,10 +127,10 @@ public class Main {
 
         if (book != null) {
             if (book.isAvailable()) {
-                book.setAvailable(false);
+                library.borrowBook(book);
                 System.out.println("Book checked out successfully.");
             } else {
-                book.setAvailable(true);
+                library.returnBook(book);
                 System.out.println("Book returned successfully.");
             }
 
