@@ -15,15 +15,15 @@ public class Main {
 
         // Create a Library object
         Library library = new Library();
+        Member member = new Student("Library Member");
 
         Map<String, Runnable> menu = new HashMap<>();
 
         menu.put("1", () -> addBook(scanner, library));
         menu.put("2", () -> searchBook(scanner, library));
-        menu.put("3", () -> printCatalog(library));
-        menu.put("4", () -> toggleCheckout(scanner, library));
-        menu.put("5", () -> displayAvailableBooks(library.getBooks()));
-
+        menu.put("3", () -> library.displayCatalog());
+        menu.put("4", () -> toggleCheckout(scanner, library, member));
+        menu.put("5", () -> library.displayAvailableBooks());
         String choice;
 
         do {
@@ -63,16 +63,6 @@ public class Main {
         return -1;
     }
 
-    // Method for displaying available books using Streams
-    static void displayAvailableBooks(List<Book> books) {
-        System.out.println("\nAvailable Books (Sorted by Title):");
-
-        books.stream()
-                .filter(Book::isAvailable)
-                .sorted(Comparator.comparing(Book::getTitle))
-                .forEach(System.out::println);
-    }
-
     // Method for adding a new book
 // Method for adding a new book
     static void addBook(Scanner scanner, Library library) {
@@ -93,16 +83,6 @@ public class Main {
         System.out.println("Book added successfully.");
     }
 
-    // Method for printing the full catalog
-    static void printCatalog(Library library) {
-        System.out.println("LibraTrack Library Catalog\n");
-
-        for (Book book : library.getBooks()) {
-            System.out.println(book);
-            System.out.println();
-        }
-    }
-
     // Method for searching for a book
     static void searchBook(Scanner scanner, Library library) {
         System.out.print("Enter the book title to search: ");
@@ -119,7 +99,7 @@ public class Main {
     }
 
     // Method for checking out or returning a book
-    static void toggleCheckout(Scanner scanner, Library library) {
+    static void toggleCheckout(Scanner scanner, Library library, Member member) {
         System.out.print("Enter the book title to checkout or return: ");
         String title = scanner.nextLine();
 
@@ -127,10 +107,16 @@ public class Main {
 
         if (book != null) {
             if (book.isAvailable()) {
-                library.borrowBook(book);
-                System.out.println("Book checked out successfully.");
+                if (member.getBorrowedBooks() < member.getBorrowLimit()) {
+                    library.borrowBook(book);
+                    member.borrowBook();
+                    System.out.println("Book checked out successfully.");
+                } else {
+                    System.out.println("You have reached your borrowing limit.");
+                }
             } else {
                 library.returnBook(book);
+                member.returnBook();
                 System.out.println("Book returned successfully.");
             }
 
