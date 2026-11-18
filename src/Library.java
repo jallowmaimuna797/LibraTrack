@@ -1,12 +1,17 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
+import java.util.LinkedList;
 
 public class Library implements Searchable, Borrowable {
 
     private Map<String, Book> books;
+    private Map<String, Queue<Member>> reservationWaitlists;
 
+    //constructor
     public Library() {
         books = new HashMap<>();
+        reservationWaitlists = new HashMap<>();
 
         books.put("1001", new Book("Java Basics", "Ebrima Touraye", "1001", true));
         books.put("1002", new Book("Database Systems", "Ebrima Faal", "1002", true));
@@ -41,6 +46,13 @@ public class Library implements Searchable, Borrowable {
     @Override
     public void returnBook(Book book) {
         book.setAvailable(true);
+
+        Member nextMember = getNextReservation(book.getIsbn());
+
+        if (nextMember != null) {
+            System.out.println("The returned book is now available for: "
+                    + nextMember.getName());
+        }
     }
 
     public void displayCatalog() {
@@ -57,5 +69,32 @@ public class Library implements Searchable, Borrowable {
                 .filter(Book::isAvailable)
                 .sorted(java.util.Comparator.comparing(Book::getTitle))
                 .forEach(System.out::println);
+    }
+
+    public void reserveBook(String isbn, Member member) {
+        Book book = books.get(isbn);
+
+        if (book == null) {
+            System.out.println("Book not found.");
+        } else if (book.isAvailable()) {
+            System.out.println("This book is available. No reservation needed.");
+        } else {
+            Queue<Member> waitlist = reservationWaitlists.computeIfAbsent(
+                    isbn, key -> new LinkedList<>());
+
+            waitlist.offer(member);
+
+            System.out.println(member.getName() + " added to the reservation waitlist.");
+        }
+    }
+
+    public Member getNextReservation(String isbn) {
+        Queue<Member> waitlist = reservationWaitlists.get(isbn);
+
+        if (waitlist != null) {
+            return waitlist.poll();
+        }
+
+        return null;
     }
 }

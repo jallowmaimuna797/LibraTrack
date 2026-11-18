@@ -24,6 +24,7 @@ public class Main {
         menu.put("3", () -> library.displayCatalog());
         menu.put("4", () -> toggleCheckout(scanner, library, member));
         menu.put("5", () -> library.displayAvailableBooks());
+        menu.put("6", () -> reserveBook(scanner, library, member));
         String choice;
 
         do {
@@ -33,6 +34,7 @@ public class Main {
             System.out.println("3. Display catalog");
             System.out.println("4. Checkout/Return a book");
             System.out.println("5. Display available books");
+            System.out.println("6. Reserve a book");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
@@ -124,6 +126,12 @@ public class Main {
         } else {
             System.out.println("Book not found.");
         }
+    }
+    static void reserveBook(Scanner scanner, Library library, Member member) {
+        System.out.print("Enter the ISBN of the book to reserve: ");
+        String isbn = scanner.nextLine();
+
+        library.reserveBook(isbn, member);
     }
 }
 
