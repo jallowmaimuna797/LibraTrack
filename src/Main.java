@@ -25,6 +25,7 @@ public class Main {
         menu.put("4", () -> toggleCheckout(scanner, library, member));
         menu.put("5", () -> library.displayAvailableBooks());
         menu.put("6", () -> reserveBook(scanner, library, member));
+        menu.put("7", () -> library.displayRecentlyReturnedBooks());
         String choice;
 
         do {
@@ -35,6 +36,7 @@ public class Main {
             System.out.println("4. Checkout/Return a book");
             System.out.println("5. Display available books");
             System.out.println("6. Reserve a book");
+            System.out.println("7. Display recently returned books");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
