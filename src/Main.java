@@ -26,6 +26,7 @@ public class Main {
         menu.put("5", () -> library.displayAvailableBooks());
         menu.put("6", () -> reserveBook(scanner, library, member));
         menu.put("7", () -> library.displayRecentlyReturnedBooks());
+        menu.put("8", () -> member.displayBorrowingHistory());
         String choice;
 
         do {
@@ -37,6 +38,7 @@ public class Main {
             System.out.println("5. Display available books");
             System.out.println("6. Reserve a book");
             System.out.println("7. Display recently returned books");
+            System.out.println("8. Display borrowing history");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
@@ -114,6 +116,7 @@ public class Main {
                 if (member.getBorrowedBooks() < member.getBorrowLimit()) {
                     library.borrowBook(book);
                     member.borrowBook();
+                    member.addTransaction(new Transaction(title, "BORROW"));
                     System.out.println("Book checked out successfully.");
                 } else {
                     System.out.println("You have reached your borrowing limit.");
@@ -124,6 +127,7 @@ public class Main {
                 System.out.println("Book returned successfully.");
             }
 
+            member.addTransaction(new Transaction(title, "RETURN"));
             System.out.println(book);
         } else {
             System.out.println("Book not found.");

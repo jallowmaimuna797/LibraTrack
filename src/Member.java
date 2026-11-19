@@ -1,7 +1,9 @@
+import java.util.LinkedList;
 public class Member {
     private String name;
     private int borrowLimit;
     private int borrowedBooks;
+    private LinkedList<Transaction> borrowingHistory = new LinkedList<>();
 
     public Member(String name, int borrowLimit) {
         this.name = name;
@@ -38,6 +40,18 @@ public class Member {
     public void returnBook() {
         if (borrowedBooks > 0) {
             borrowedBooks--;
+        }
+    }
+
+    public void addTransaction(Transaction transaction) {
+        borrowingHistory.add(transaction);
+    }
+
+    public void displayBorrowingHistory() {
+        System.out.println("\nBorrowing History for " + name + ":");
+
+        for (Transaction transaction : borrowingHistory) {
+            System.out.println(transaction);
         }
     }
 
