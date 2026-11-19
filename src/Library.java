@@ -4,16 +4,19 @@ import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Deque;
 import java.util.ArrayDeque;
+import java.util.TreeMap;
 
 public class Library implements Searchable, Borrowable {
 
     private Map<String, Book> books;
+    private Map<String, Book> sortedCatalog;
     private Map<String, Queue<Member>> reservationWaitlists;
     private Deque<Book> recentlyReturnedBooks;
 
     //constructor
     public Library() {
         books = new HashMap<>();
+        sortedCatalog = new TreeMap<>();
         reservationWaitlists = new HashMap<>();
         recentlyReturnedBooks = new ArrayDeque<>();
 
@@ -23,6 +26,9 @@ public class Library implements Searchable, Borrowable {
         books.put("1004", new Book("Cybersecurity", "Maimuna Jallow", "1004", true));
         books.put("1005", new Book("Networking", "Ebou Badjie", "1005", false));
 
+        for (Book book : books.values()) {
+            sortedCatalog.put(book.getTitle(), book);
+        }
         reservationWaitlists = new HashMap<>();
     }
 
@@ -32,6 +38,7 @@ public class Library implements Searchable, Borrowable {
 
     public void addBook(Book book) {
         books.put(book.getIsbn(), book);
+        sortedCatalog.put(book.getTitle(), book);
     }
 
     @Override
@@ -63,7 +70,9 @@ public class Library implements Searchable, Borrowable {
     }
 
     public void displayCatalog() {
-        for (Book book : books.values()) {
+        System.out.println("\nLibrary Catalog (Sorted by Title):");
+
+        for (Book book : sortedCatalog.values()) {
             System.out.println(book);
             System.out.println();
         }
